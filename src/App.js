@@ -1,23 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
 
 function App() {
+  const [a, setA] = useState('');
+  const [b, setB] = useState('');
+  const [result, setResult] = useState('');
+
+  const handleAdd = async () => {
+    if (!a || !b) {
+      alert('Please enter both numbers');
+      return;
+    }
+
+    const response = await fetch(`https://api.mathjs.org/v4/?expr=${a}%2B${b}`);
+    const data = await response.text();
+    setResult(data);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ padding: 20 }}>
+      <h2>🧮 Calculator </h2>
+      <input
+        type="number"
+        placeholder="Enter number A"
+        value={a}
+        onChange={(e) => setA(e.target.value)}
+      />
+      <input
+        type="number"
+        placeholder="Enter number B"
+        value={b}
+        onChange={(e) => setB(e.target.value)}
+      />
+      <button onClick={handleAdd}>Add</button>
+      <p>Result: {result}</p>
     </div>
   );
 }
